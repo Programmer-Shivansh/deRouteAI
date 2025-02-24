@@ -1,7 +1,11 @@
 import json
 from typing import Dict
 import os
-from zerepy.src.agent import Agent  # Adjust path post-install
+import sys
+zerepy_path = os.path.join(os.path.dirname(__file__), "ZerePy")
+if zerepy_path not in sys.path:
+    sys.path.append(zerepy_path)
+from src.agent import ZerePyAgent  # Adjust path post-install
 from .plugins.gas_fee import GasFeePlugin
 from .plugins.liquidity import LiquidityPlugin
 
@@ -24,7 +28,7 @@ class AIRouter:
             raise FileNotFoundError("swap_agent.json not found. Please create it.")
 
         # Initialize ZerePy agent
-        self.agent = Agent("app/config/swap_agent.json")
+        self.agent = ZerePyAgent(zerepy_path)
         self.agent.load()
 
     def analyze_route(self, request: Dict) -> Dict:
